@@ -10,6 +10,35 @@
 // Vzemite zaporedja iz prejšnjih vaj in naredite nov objekt, ki sprejme zaporedje in ga naredi iterabilnega
 
 // Iteratorji
+use vaje_06::zaporedje::{AritmeticnoZaporedje, Zaporedje};
+
+struct ZaporedjeIter<'a, T, Z: Zaporedje<T>> {
+    zaporedje: &'a Z,
+    index: u64,
+    _marker: std::marker::PhantomData<T>,
+}
+
+impl<'a, T, Z: Zaporedje<T>> ZaporedjeIter<'a, T, Z> {
+    fn new(z: &'a Z) -> Self {
+        ZaporedjeIter { zaporedje: z, index: 0, _marker: std::marker::PhantomData }
+    }
+}
+
+impl<'a, T, Z: Zaporedje<T>> Iterator for ZaporedjeIter<'a, T, Z> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.index += 1;
+        Some(self.zaporedje.k_th(self.index - 1))
+    }
+}
+
+fn main() {
+    let naravna= AritmeticnoZaporedje::new("a", 1, 1);
+    let prvih_10: Vec<u64> = ZaporedjeIter::new(&naravna).take(10).collect();
+    let vsota: u64 = ZaporedjeIter::new(&naravna).take(10).sum();
+    println!("prvih 10: {:?}", vsota)
+}
 
 // Napišite funkcijo, ki sprejme vektor XYZ in s pomočjo iteratorja naredi W
 // števil in izpiše vsako v svojo vrstico

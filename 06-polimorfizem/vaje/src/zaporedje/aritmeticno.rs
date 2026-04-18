@@ -49,7 +49,7 @@ where
     fn k_th(&self, k: u64) -> T {
         // a_k = a1 + (k-1) * d, izračunano s ponavljajočim seštevanjem
         let mut result = self.a1.clone();
-        for _ in 1..k {
+        for _ in 1..=k {
             result = result + self.d.clone();
         }
         result
